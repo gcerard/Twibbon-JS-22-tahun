@@ -1,1 +1,1 @@
-Twibbon generator page to celebrate 2 decades of JEMARI Sakato
+Twibbon generator page to celebrate 22 years of JEMARI Sakato
