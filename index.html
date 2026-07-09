@@ -22,6 +22,7 @@
             align-items: center;
             height: 100vh;
             background-color: #ffffff;
+            margin: 0;
         }
         .container {
             text-align: center;
@@ -40,8 +41,9 @@
         }
         canvas {
             border: 1px solid #ccc;
-            width: 350px;  /* Display size */
-            height: 350px; /* Display size */
+            width: 360px;  /* Updated to 4:5 ratio to match 1080x1350 */
+            height: 450px; /* Updated to 4:5 ratio to match 1080x1350 */
+            touch-action: none; /* Prevents unwanted scrolling while moving image */
         }
     </style>
 </head>
@@ -52,18 +54,17 @@
         <br><br>
         <button class="btn" onclick="generateTwibbon()">Generate Twibbon</button>
         <br><br>
-        <canvas id="canvas" width="1080" height="1080" style="display: none;"></canvas>
-        <canvas id="displayCanvas" width="300" height="300"></canvas>
+        <canvas id="canvas" width="1080" height="1350" style="display: none;"></canvas>
+        <canvas id="displayCanvas" width="360" height="450"></canvas>
         <br><br>
         <button class="btn" onclick="downloadImage()">Download Image</button>
         <div class="credit">
             <a href="https://www.instagram.com/affifasy" target="_blank">@affifasy</a> on Instagram
-    </div>
-
-    <script>
+        </div>
+    </div> <script>
         let img = new Image();
         let frameImg = new Image();
-        frameImg.src = 'twibbon.png'; // Update with your frame image path
+        frameImg.src = 'Twibbon 22.png'; // Update with your frame image path
         let displayCanvas, displayCtx, canvas, ctx;
         let isDragging = false;
         let startX, startY;
@@ -83,6 +84,10 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     img.onload = function() {
+                        // Reset image position and scale when a new image is loaded
+                        imgX = 0;
+                        imgY = 0;
+                        imgScale = canvas.width / img.width; 
                         drawImage();
                     };
                     img.src = e.target.result;
@@ -94,13 +99,13 @@
                 displayCanvas.addEventListener('mousemove', dragImage);
                 displayCanvas.addEventListener('mouseup', stopDragging);
                 displayCanvas.addEventListener('mouseout', stopDragging);
-                displayCanvas.addEventListener('wheel', resizeImage);
+                displayCanvas.addEventListener('wheel', resizeImage, { passive: false });
 
                 // Add touch event listeners for mobile devices
-                displayCanvas.addEventListener('touchstart', startDragging);
-                displayCanvas.addEventListener('touchmove', dragImage);
+                displayCanvas.addEventListener('touchstart', startDragging, { passive: false });
+                displayCanvas.addEventListener('touchmove', dragImage, { passive: false });
                 displayCanvas.addEventListener('touchend', stopDragging);
-                displayCanvas.addEventListener('touchmove', handlePinch);
+                displayCanvas.addEventListener('touchmove', handlePinch, { passive: false });
             } else {
                 alert('Please upload an image file.');
             }
@@ -123,9 +128,10 @@
         function getOffset(event) {
             if (event.touches) {
                 const touch = event.touches[0];
+                const rect = displayCanvas.getBoundingClientRect();
                 return {
-                    x: touch.clientX - displayCanvas.getBoundingClientRect().left,
-                    y: touch.clientY - displayCanvas.getBoundingClientRect().top
+                    x: touch.clientX - rect.left,
+                    y: touch.clientY - rect.top
                 };
             }
             return {
@@ -168,7 +174,7 @@
                 imgScale /= 1.1;
             }
             drawImage();
-            event.preventDefault(); // Prevent zooming on touch devices
+            event.preventDefault(); // Prevent page zooming/scrolling
         }
 
         function handlePinch(event) {
@@ -192,7 +198,7 @@
 
         function downloadImage() {
             const link = document.createElement('a');
-            link.download = 'twibbon.png';
+            link.download = 'Twibbon 22.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
         }
