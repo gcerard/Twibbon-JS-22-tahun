@@ -252,7 +252,7 @@
             }
 
             const dataUrl = canvas.toDataURL('image/png');
-            const fileName = 'Twibbon 22.png';
+            const fileName = 'Twibbon 22 Tahun JEMARI Sakato.png';
 
             // Check if on a mobile device and Web Share API is available (Safari/iOS Native fix)
             if (navigator.share && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
@@ -260,7 +260,7 @@
                     const file = dataURLtoFile(dataUrl, fileName);
                     navigator.share({
                         files: [file],
-                        title: 'Twibbon JEMARI',
+                        title: 'Twibbon 22 Tahun JEMARI Sakato | Make your own here! https://js-22-tahun.vercel.app/',
                     }).catch((error) => console.log('Sharing aborted', error));
                 } catch (e) {
                     console.error("Share failed", e);
